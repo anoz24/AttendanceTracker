@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class ProfileTab extends StatelessWidget {
+class HistoryTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
