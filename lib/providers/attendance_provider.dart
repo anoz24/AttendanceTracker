@@ -19,3 +19,7 @@ class AttendanceTimes {
 final attendanceTimesProvider = StateProvider<AttendanceTimes>((ref) {
   return AttendanceTimes(date: DateTime.now());
 });
+
+final attendanceHistoryProvider = StateProvider<List<AttendanceTimes>>((ref) {
+  return [];
+});

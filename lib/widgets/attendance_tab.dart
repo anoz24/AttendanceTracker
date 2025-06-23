@@ -36,7 +36,9 @@ class AttendanceTab extends ConsumerWidget {
           children: [
             SizedBox(height: 90),
             Text(
-              attendanceTimes.date != null ? getDayName(attendanceTimes.date) : "",
+              attendanceTimes.date != null
+                  ? getDayName(attendanceTimes.date)
+                  : "",
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -63,15 +65,16 @@ class AttendanceTab extends ConsumerWidget {
             ),
             SizedBox(height: 20),
             CupertinoButton(
-              onPressed: (attendanceTimes.clockIn != null && attendanceTimes.clockOut == null)
-                  ? null
-                  : () {
+              onPressed: (attendanceTimes.clockIn == null &&
+                      attendanceTimes.clockOut == null)
+                  ? () {
                       ref.read(attendanceTimesProvider.notifier).state =
                           attendanceTimes.copyWith(
-                            clockIn: DateTime.now(),
-                            clockOut: null,
-                          );
-                    },
+                        clockIn: DateTime.now(),
+                        clockOut: null,
+                      );
+                    }
+                  : null,
               child: Text("Clock in"),
             ),
             SizedBox(height: 60),
@@ -84,15 +87,48 @@ class AttendanceTab extends ConsumerWidget {
             ),
             SizedBox(height: 20),
             CupertinoButton(
-              onPressed: (attendanceTimes.clockIn != null && attendanceTimes.clockOut == null)
+              onPressed: (attendanceTimes.clockIn != null &&
+                      attendanceTimes.clockOut == null)
                   ? () {
-                      ref.read(attendanceTimesProvider.notifier).state =
-                          attendanceTimes.copyWith(clockOut: DateTime.now());
+                      final now = DateTime.now();
+                      if (attendanceTimes.clockIn != null &&
+                          now.isAfter(attendanceTimes.clockIn!)) {
+                        ref.read(attendanceTimesProvider.notifier).state =
+                            attendanceTimes.copyWith(clockOut: now);
+
+                        final historyNotifier =
+                            ref.read(attendanceHistoryProvider.notifier);
+                        historyNotifier.state = [
+                          ...historyNotifier.state,
+                          AttendanceTimes(
+                            date: attendanceTimes.date,
+                            clockIn: attendanceTimes.clockIn,
+                            clockOut: now,
+                          ),
+                        ];
+
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (context) => CupertinoAlertDialog(
+                            title: Text("Success"),
+                            content: Text("You Completed Work Today Yaay"),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text("OK"),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   : null,
               child: Text(
                 "Clock out",
-                style: TextStyle(color: Colors.red),
+                // style: TextStyle(
+                //     color: (attendanceTimes.clockOut == null)
+                //         ? Colors.red
+                //         : Colors.grey[300]!),
               ),
             ),
           ],

@@ -1,4 +1,4 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:attendancetracker/widgets/attendance_tab.dart';
 import 'package:attendancetracker/widgets/history_tab.dart';
 import 'package:attendancetracker/widgets/report_tab.dart';
@@ -12,6 +12,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  int _currentIndex = 0;
+
   final List<Widget> _tabs = [
     AttendanceTab(),
     HistoryTab(),
@@ -22,6 +24,13 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
+        backgroundColor: Colors.transparent,
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.time),
@@ -37,7 +46,14 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-      tabBuilder: (context, index) => _tabs[index],
+      tabBuilder: (context, index) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 700),
+          child: _tabs[_currentIndex],
+          transitionBuilder: (child, animation) =>
+              FadeTransition(opacity: animation, child: child),
+        );
+      },
     );
   }
 }
