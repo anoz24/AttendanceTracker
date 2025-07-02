@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -24,14 +23,12 @@ class HistoryTab extends ConsumerWidget {
       return "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
     }
 
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Padding(
-          padding: EdgeInsets.only(top: 16.0),
-          child: Text('History', style: TextStyle(fontSize: 20)),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('History'),
+        centerTitle: true,
       ),
-      child: history.isEmpty
+      body: history.isEmpty
           ? Center(child: Text('No history yet'))
           : ListView.builder(
               itemCount: history.length,

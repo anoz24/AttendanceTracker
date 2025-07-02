@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -21,20 +20,16 @@ class AttendanceTab extends ConsumerWidget {
       return DateFormat('EEEE').format(date);
     }
 
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Padding(
-          padding: EdgeInsets.only(top: 16.0),
-          child: Text(
-            'Attendance',
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Attendance'),
+        centerTitle: true,
       ),
-      child: Center(
+      body: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(height: 90),
+            SizedBox(height: 40),
             Text(
               attendanceTimes.date != null
                   ? getDayName(attendanceTimes.date)
@@ -55,7 +50,7 @@ class AttendanceTab extends ConsumerWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 40),
             Text(
               formatTime(attendanceTimes.clockIn),
               style: TextStyle(
@@ -64,7 +59,7 @@ class AttendanceTab extends ConsumerWidget {
               ),
             ),
             SizedBox(height: 20),
-            CupertinoButton(
+            ElevatedButton(
               onPressed: (attendanceTimes.clockIn == null &&
                       attendanceTimes.clockOut == null)
                   ? () {
@@ -77,7 +72,7 @@ class AttendanceTab extends ConsumerWidget {
                   : null,
               child: Text("Clock in"),
             ),
-            SizedBox(height: 60),
+            SizedBox(height: 40),
             Text(
               formatTime(attendanceTimes.clockOut),
               style: TextStyle(
@@ -86,7 +81,11 @@ class AttendanceTab extends ConsumerWidget {
               ),
             ),
             SizedBox(height: 20),
-            CupertinoButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
               onPressed: (attendanceTimes.clockIn != null &&
                       attendanceTimes.clockOut == null)
                   ? () {
@@ -107,13 +106,13 @@ class AttendanceTab extends ConsumerWidget {
                           ),
                         ];
 
-                        showCupertinoDialog(
+                        showDialog(
                           context: context,
-                          builder: (context) => CupertinoAlertDialog(
+                          builder: (context) => AlertDialog(
                             title: Text("Success"),
                             content: Text("You Completed Work Today Yaay"),
                             actions: [
-                              CupertinoDialogAction(
+                              TextButton(
                                 child: Text("OK"),
                                 onPressed: () => Navigator.of(context).pop(),
                               ),
@@ -123,13 +122,7 @@ class AttendanceTab extends ConsumerWidget {
                       }
                     }
                   : null,
-              child: Text(
-                "Clock out",
-                // style: TextStyle(
-                //     color: (attendanceTimes.clockOut == null)
-                //         ? Colors.red
-                //         : Colors.grey[300]!),
-              ),
+              child: Text("Clock out"),
             ),
           ],
         ),

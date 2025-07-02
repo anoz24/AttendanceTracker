@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:attendancetracker/widgets/attendance_tab.dart';
 import 'package:attendancetracker/widgets/history_tab.dart';
 import 'package:attendancetracker/widgets/report_tab.dart';
-import 'package:flutter/cupertino.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -22,9 +21,14 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        backgroundColor: Colors.transparent,
+    return Scaffold(
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 700),
+        child: _tabs[_currentIndex],
+        transitionBuilder: (child, animation) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -33,27 +37,19 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.time),
+            icon: Icon(Icons.access_time),
             label: 'Attendance',
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.bag),
+            icon: Icon(Icons.work),
             label: 'History',
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.paperclip),
+            icon: Icon(Icons.insert_drive_file),
             label: 'Report',
           ),
         ],
       ),
-      tabBuilder: (context, index) {
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 700),
-          child: _tabs[_currentIndex],
-          transitionBuilder: (child, animation) =>
-              FadeTransition(opacity: animation, child: child),
-        );
-      },
     );
   }
 }
