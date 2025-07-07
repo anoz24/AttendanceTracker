@@ -20,6 +20,34 @@ final attendanceTimesProvider = StateProvider<AttendanceTimes>((ref) {
   return AttendanceTimes(date: DateTime.now());
 });
 
-final attendanceHistoryProvider = StateProvider<List<AttendanceTimes>>((ref) {
-  return [];
+class AttendanceHistoryNotifier extends StateNotifier<List<AttendanceTimes>> {
+  AttendanceHistoryNotifier() : super([]);
+
+  void addAttendanceRecord({
+    required DateTime date,
+    required DateTime clockIn,
+    required DateTime clockOut,
+  }) {
+    final newRecord = AttendanceTimes(
+      date: date,
+      clockIn: clockIn,
+      clockOut: clockOut,
+    );
+    
+    final updatedList = [...state, newRecord];
+    updatedList.sort((a, b) {
+      if (a.date == null && b.date == null) return 0;
+      if (a.date == null) return 1;
+      if (b.date == null) return -1;
+      return b.date!.compareTo(a.date!);
+    });
+    
+    state = updatedList;
+  }
+}
+
+final attendanceHistoryProvider =
+    StateNotifierProvider<AttendanceHistoryNotifier, List<AttendanceTimes>>((ref) {
+  return AttendanceHistoryNotifier();
 });
+
