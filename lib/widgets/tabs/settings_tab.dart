@@ -1,68 +1,49 @@
-import 'package:attendancetracker/providers/app_settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../providers/theme_provider.dart';
-import '../common/animated_app_bar.dart';
-import '../common/theme_toggle_button.dart';
+import '../components/animated_app_bar.dart';
+import '../components/settings_section_header.dart';
+import '../components/time_format_setting_tile.dart';
+import '../components/working_days_setting_tile.dart';
+import '../components/work_hours_setting_tile.dart';
+import '../components/appearance_setting_tile.dart';
 
 class SettingsTab extends ConsumerWidget {
   const SettingsTab({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(appSettingsProvider);
-    final themeMode = ref.watch(themeProvider);
-
-    String getThemeDescription() {
-      switch (themeMode) {
-        case ThemeMode.light:
-          return 'Always use light theme';
-        case ThemeMode.dark:
-          return 'Always use dark theme';
-        case ThemeMode.system:
-          return 'Follows system dark/light mode';
-      }
-    }
-
     return Scaffold(
       appBar: const AnimatedAppBar(title: 'Settings'),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(
-            16, 16, 16, 100), // Extra bottom padding for floating nav bar
-        child: Column(
-          children: [
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.palette),
-                title: const Text('Theme',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text(getThemeDescription()),
-                trailing: const ThemeToggleButton(),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.access_time),
-                title: const Text(
-                  'Time Format',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(settings.is24HourFormat
-                    ? '24-hour (14:30)'
-                    : '12-hour (2:30 PM)'),
-                trailing: Switch(
-                  value: settings.is24HourFormat,
-                  onChanged: (value) {
-                    ref
-                        .read(appSettingsProvider.notifier)
-                        .setClockFormat(value);
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 120), // Extra bottom padding for floating nav bar
+        children: const [
+
+          // Time & Format Section
+          SettingsSectionHeader(
+            title: 'Time & Format',
+            icon: Icons.access_time,
+          ),
+          TimeFormatSettingTile(),
+          SizedBox(height: 24),
+
+          // Work Configuration Section
+          SettingsSectionHeader(
+            title: 'Work Configuration',
+            icon: Icons.work,
+          ),
+          WorkingDaysSettingTile(),
+          SizedBox(height: 8),
+          WorkHoursSettingTile(),
+          SizedBox(height: 24),
+
+          // Appearance Section
+          SettingsSectionHeader(
+            title: 'Appearance',
+            icon: Icons.palette,
+          ),
+          AppearanceSettingTile(),
+          SizedBox(height: 24),
+        ],
       ),
     );
   }

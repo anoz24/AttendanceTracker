@@ -3,7 +3,7 @@ import '../widgets/tabs/attendance_tab.dart';
 import '../widgets/tabs/history_tab.dart';
 import '../widgets/tabs/report_tab.dart';
 import '../widgets/tabs/settings_tab.dart';
-import '../widgets/common/floating_nav_bar.dart';
+import '../widgets/components/floating_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

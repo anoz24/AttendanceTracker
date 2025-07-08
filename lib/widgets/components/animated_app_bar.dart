@@ -8,7 +8,7 @@ class AnimatedAppBar extends StatefulWidget implements PreferredSizeWidget {
   const AnimatedAppBar({
     super.key,
     required this.title,
-    this.centerTitle = false,
+    this.centerTitle = true,
     this.actions,
   });
 
@@ -74,6 +74,7 @@ class _AnimatedAppBarState extends State<AnimatedAppBar>
     return AppBar(
       centerTitle: widget.centerTitle,
       actions: widget.actions,
+      scrolledUnderElevation: 0,
       title: AnimatedBuilder(
         animation: _animationController,
         builder: (context, child) {
@@ -84,9 +85,7 @@ class _AnimatedAppBarState extends State<AnimatedAppBar>
               child: widget.title is String
                   ? Text(
                       widget.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).appBarTheme.titleTextStyle,
                     )
                   : widget.title,
             ),

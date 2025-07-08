@@ -36,12 +36,12 @@ class ActivityCard extends ConsumerWidget {
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
             Icons.work_outline,
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.onPrimary,
             size: iconSize ?? 24,
           ),
         ),
@@ -64,14 +64,17 @@ class ActivityCard extends ConsumerWidget {
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Text(
-            DateTimeUtils.calculateWorkingHours(record.clockIn, record.clockOut),
+            DateTimeUtils.calculateWorkingHours(
+              record.clockIn, 
+              record.clockOut,
+            ),
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.onPrimary,
               fontSize: badgeFontSize ?? 13,
             ),
           ),
@@ -81,7 +84,6 @@ class ActivityCard extends ConsumerWidget {
   }
 }
 
-// Compact version for home page recent activity
 class CompactActivityCard extends ConsumerWidget {
   final dynamic record;
 
